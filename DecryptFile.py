@@ -55,6 +55,7 @@ def decrypt_file(user_id):
             label=None
         )
     )
+    # Write the decrypted plaintext to a file
     with open(f"decryptedPlaintext_user.txt", "wb") as file:
         file.write(plaintext)
     print(f"Message Decrypted for User {user_id}")
