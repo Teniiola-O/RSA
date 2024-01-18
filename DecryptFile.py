@@ -2,14 +2,15 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 
-# Load the keys
+# Load the private and public keys for a specific user
 def load_keys(user_id):
+    # Load the private key from a PEM file
     with open(f"privatekey_user{user_id}.pem", "rb") as key_file:
         private_key = serialization.load_pem_private_key(
             key_file.read(),
             password=None,
         )
-
+    # Load the private key from a PEM file
     with open(f"publickey_user{user_id}.pem", "rb") as key_file:
         public_key = serialization.load_pem_public_key(
             key_file.read(),
@@ -17,14 +18,19 @@ def load_keys(user_id):
 
     return private_key, public_key
 
-# Verify signature
+# Verify the signature of a message for a specific user
 def verify_signature(user_id):
+    # Load the private and public keys
     private_key, public_key = load_keys(user_id)
+    # Read the signed message from a file
     with open(f"signature_user{user_id}", "rb") as f:
         signed_message = f.read()
 
+    # Extract the message and signature from the signed message
     message = signed_message[:32]
     signature = signed_message[32:]
+    
+    # Verify the signature using the public key
     verifier = public_key.verify(
         signature,
         message,
@@ -34,6 +40,7 @@ def verify_signature(user_id):
         ),
         hashes.SHA256()
     )
+    # Print the verification result
     try:
         verifier
         print(f"Signature verification for User {user_id} successful. Data integrity verified.")
@@ -41,12 +48,15 @@ def verify_signature(user_id):
         print(f"Signature verification for User {user_id} failed: {e}")
         return None
 
-# Decrypt file
+# Decrypt an encrypted file using the private key of a specific user
 def decrypt_file(user_id):
+    # Load the private key
     private_key, public_key = load_keys(user_id)
+    # Read the ciphertext from an encrypted file
     with open(f"encryptedCiphertext_user.enc", "rb") as file:
         ciphertext = file.read()
 
+    # Decrypt the ciphertext using the private key
     plaintext = private_key.decrypt(
         ciphertext,
         padding.OAEP(

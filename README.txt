@@ -1,0 +1,6 @@
+HOW TO USE RSA ALGORITHM
+
+ INSTALL Cryptography PACKAGE ( https://pypi.org/project/cryptography/) 
+ RUN THE GenerateKey.py TO GENERATE PRIVATE AND PUBLIC KEYS
+ RUN THE EncryptFile.py TO HASH, SIGN AND ENCRYPT FILE 
+ RUN THE decryptFile.py TO VERIFY HASH, SIGNATURE,AND DECRYPT FILE
